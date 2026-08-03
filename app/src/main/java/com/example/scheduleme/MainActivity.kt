@@ -91,23 +91,29 @@ fun StartAnimation(onFinished: () -> Unit){
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen(){
+    var currentDate by remember{
+        mutableStateOf(YearMonth.now())
+    }
     Column(
         modifier = Modifier.fillMaxSize().padding(start = 15.dp, top = 50.dp, end = 15.dp, bottom = 15.dp)
     ) {
-        var date = "май 2026"
-        CalendarHeader(date)
+        CalendarHeader(currentDate)
         WeekHeader()
-        CalendarGrid(date)
+        CalendarGrid(currentDate)
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarHeader(date: String){
+fun CalendarHeader(date: YearMonth){
+    val dateFormatter = DateTimeFormatter.ofPattern(
+        "LLLL yyyy", Locale("ru")
+    )
     Box(
         modifier = Modifier.fillMaxWidth().height(50.dp).border(1.dp, Color.Gray),
         contentAlignment = Alignment.Center
     ){
-        Text(text = date)
+        Text(text = date.format(dateFormatter))
     }
 }
 
@@ -133,9 +139,8 @@ fun WeekHeader(){
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarGrid(date: String){
-    var dateParsed = parseDate(date)
-    val listOfDays = buildCalendarDays(dateParsed.first, dateParsed.second)
+fun CalendarGrid(date: YearMonth){
+    val listOfDays = buildCalendarDays(date.year, date.monthValue)
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
         modifier = Modifier.fillMaxWidth()
@@ -170,14 +175,4 @@ fun buildCalendarDays(year: Int, month: Int) : List<Int?>{
     }
 
     return result
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun parseDate(date: String): Pair<Int, Int> {
-    val formatter = DateTimeFormatter.ofPattern(
-        "LLLL yyyy",
-        Locale("ru")
-    )
-    val yearMonth = YearMonth.parse(date, formatter)
-    return yearMonth.year to yearMonth.monthValue
 }
