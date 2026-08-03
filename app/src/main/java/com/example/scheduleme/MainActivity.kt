@@ -35,6 +35,12 @@ import com.airbnb.lottie.compose.*
 import java.time.YearMonth
 import java.time.DayOfWeek
 import android.util.Log
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.IconButton
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -97,7 +103,15 @@ fun CalendarScreen(){
     Column(
         modifier = Modifier.fillMaxSize().padding(start = 15.dp, top = 50.dp, end = 15.dp, bottom = 15.dp)
     ) {
-        CalendarHeader(currentDate)
+        CalendarHeader(
+            date = currentDate,
+            onPreviousClick = {
+                currentDate = currentDate.minusMonths(1)
+            },
+            onNextClick = {
+                currentDate = currentDate.plusMonths(1)
+            }
+        )
         WeekHeader()
         CalendarGrid(currentDate)
     }
@@ -105,15 +119,21 @@ fun CalendarScreen(){
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarHeader(date: YearMonth){
+fun CalendarHeader(date: YearMonth, onPreviousClick: () -> Unit, onNextClick: () -> Unit){
     val dateFormatter = DateTimeFormatter.ofPattern(
         "LLLL yyyy", Locale("ru")
     )
-    Box(
-        modifier = Modifier.fillMaxWidth().height(50.dp).border(1.dp, Color.Gray),
-        contentAlignment = Alignment.Center
-    ){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onPreviousClick) {
+            Icon(Icons.Default.KeyboardArrowLeft, null)
+        }
         Text(text = date.format(dateFormatter))
+        IconButton(onClick = onNextClick) {
+            Icon(Icons.Default.KeyboardArrowRight, null)
+        }
     }
 }
 
@@ -141,11 +161,12 @@ fun WeekHeader(){
 @Composable
 fun CalendarGrid(date: YearMonth){
     val listOfDays = buildCalendarDays(date.year, date.monthValue)
+    var cellCount = if(listOfDays[35] == null) 35 else 42
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
         modifier = Modifier.fillMaxWidth()
     ) {
-        items(42){ index ->
+        items(cellCount){ index ->
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)
