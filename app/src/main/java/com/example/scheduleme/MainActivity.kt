@@ -1,9 +1,11 @@
 package com.example.scheduleme
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,8 +32,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.scheduleme.ui.theme.ScheduleMeTheme
 import com.airbnb.lottie.compose.*
+import java.time.YearMonth
+import java.time.DayOfWeek
+import android.util.Log
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -80,14 +88,16 @@ fun StartAnimation(onFinished: () -> Unit){
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarScreen(){
     Column(
         modifier = Modifier.fillMaxSize().padding(start = 15.dp, top = 50.dp, end = 15.dp, bottom = 15.dp)
     ) {
-        CalendarHeader("Май 2026")
+        var date = "май 2026"
+        CalendarHeader(date)
         WeekHeader()
-        CalendarGrid()
+        CalendarGrid(date)
     }
 }
 
@@ -121,8 +131,11 @@ fun WeekHeader(){
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarGrid(){
+fun CalendarGrid(date: String){
+    var dateParsed = parseDate(date)
+    val listOfDays = buildCalendarDays(dateParsed.first, dateParsed.second)
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
         modifier = Modifier.fillMaxWidth()
@@ -134,8 +147,37 @@ fun CalendarGrid(){
                     .border(1.dp, Color.Gray),
                 contentAlignment = Alignment.Center
             ) {
-              Text(text = "${index + 1}")
+              Text(text = "${listOfDays.get(index)}")
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun buildCalendarDays(year: Int, month: Int) : List<Int?>{
+    val yearMonth = YearMonth.of(year, month)
+    var index = yearMonth.atDay(1).dayOfWeek.value
+    val result = mutableListOf<Int?>()
+
+    for (i in 1 until index) {
+        result.add(null)
+    }
+    for(i in 1..yearMonth.lengthOfMonth()){
+        result.add(i)
+    }
+    while (result.size < 42) {
+        result.add(null)
+    }
+
+    return result
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun parseDate(date: String): Pair<Int, Int> {
+    val formatter = DateTimeFormatter.ofPattern(
+        "LLLL yyyy",
+        Locale("ru")
+    )
+    val yearMonth = YearMonth.parse(date, formatter)
+    return yearMonth.year to yearMonth.monthValue
 }
