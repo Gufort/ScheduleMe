@@ -6,16 +6,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.navigation.compose.rememberNavController
-import com.example.scheduleme.ui.animations.StartAnimation
-import com.example.scheduleme.ui.calendar.CalendarScreen
-import com.example.scheduleme.ui.theme.ScheduleMeTheme
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.scheduleme.navigation.NavGraph
+import com.example.scheduleme.ui.animations.StartAnimation
+import com.example.scheduleme.ui.theme.ScheduleMeTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -23,21 +25,32 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ScheduleMeTheme {
-                var showAnimation by remember { // сохраняет значение между запусками composable ф-й
-                    mutableStateOf(true)
-                }
-                if(showAnimation){
-                    StartAnimation {
-                        showAnimation = false
+            var darkTheme by remember {
+                mutableStateOf(false)
+            }
+            ScheduleMeTheme (darkTheme = darkTheme) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ){
+                    var showAnimation by remember { // сохраняет значение между запусками composable ф-й
+                        mutableStateOf(true)
                     }
-                }
-                else{
-                    val navController = rememberNavController()
+                    if(showAnimation){
+                        StartAnimation {
+                            showAnimation = false
+                        }
+                    }
+                    else{
+                        val navController = rememberNavController()
 
-                    NavGraph(
-                        navController = navController
-                    )
+                        NavGraph(
+                            navController = navController,
+                            onThemeChange = { isDark ->
+                                darkTheme = isDark
+                            }
+                        )
+                    }
                 }
             }
         }
