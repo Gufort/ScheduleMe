@@ -43,6 +43,7 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.benchmark.traceprocessor)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -51,6 +52,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation("com.airbnb.android:lottie-compose:6.6.7")
     implementation("androidx.compose.material:material-icons-core")
+    implementation("androidx.navigation:navigation-compose:2.9.3")
+    implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.ui)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
