@@ -12,7 +12,7 @@ import com.example.scheduleme.ui.settings.SettingsScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavGraph(navController: NavHostController, onThemeChange: (Boolean) -> Unit){
+fun NavGraph(navController: NavHostController, onThemeChange: (Boolean) -> Unit, darkTheme: Boolean){
     NavHost(
         navController = navController,
         startDestination = Screen.Calendar.route
@@ -27,7 +27,8 @@ fun NavGraph(navController: NavHostController, onThemeChange: (Boolean) -> Unit)
                 onThemeChange = onThemeChange,
                 onBack = {
                     navController.popBackStack()
-                }
+                },
+                darkTheme = darkTheme
             )
         }
     }

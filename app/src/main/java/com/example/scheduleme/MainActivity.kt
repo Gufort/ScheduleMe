@@ -48,7 +48,8 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             onThemeChange = { isDark ->
                                 darkTheme = isDark
-                            }
+                            },
+                            darkTheme
                         )
                     }
                 }
