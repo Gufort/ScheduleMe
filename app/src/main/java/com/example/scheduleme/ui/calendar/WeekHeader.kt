@@ -1,5 +1,6 @@
 package com.example.scheduleme.ui.calendar
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -18,7 +19,7 @@ fun WeekHeader(){
     val weekDays = listOf("пн", "вт", "ср", "чт", "пт", "сб", "вс")
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
-        modifier = Modifier.height(50.dp)
+        modifier = Modifier.height(50.dp).background(Color(0xFFFF9800))
     ) {
         items(weekDays.size) { index ->
             Box(
