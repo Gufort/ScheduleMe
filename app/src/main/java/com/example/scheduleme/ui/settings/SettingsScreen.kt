@@ -18,6 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,17 +26,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @SuppressLint("RememberReturnType")
 @Composable
 fun SettingsScreen(
-    onThemeChange: (Boolean) -> Unit,
-    onBack: () -> Unit,
-    darkTheme: Boolean
+    viewModel: SettingsViewModel = hiltViewModel(),
+    onBack: () -> Unit
 ){
     var expanded by remember{
         mutableStateOf(false)
     }
+    val darkTheme by viewModel.darkTheme.collectAsState()
     val selectedTheme = if (darkTheme) "Темная" else "Светлая"
     Column(
         modifier = Modifier.fillMaxSize().padding(start = 15.dp, top = 50.dp, end = 15.dp, bottom = 15.dp)
@@ -78,14 +80,14 @@ fun SettingsScreen(
                     DropdownMenuItem(
                         text = { Text(text = "Светлая") },
                         onClick = {
-                            onThemeChange(false)
+                            viewModel.setDarkTheme(false)
                             expanded = false
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(text = "Темная") },
                         onClick = {
-                            onThemeChange(true)
+                            viewModel.setDarkTheme(true)
                             expanded = false
                         }
                     )

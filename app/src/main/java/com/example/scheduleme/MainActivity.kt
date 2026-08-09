@@ -18,7 +18,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.scheduleme.navigation.NavGraph
 import com.example.scheduleme.ui.animations.StartAnimation
 import com.example.scheduleme.ui.theme.ScheduleMeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,11 +47,7 @@ class MainActivity : ComponentActivity() {
                         val navController = rememberNavController()
 
                         NavGraph(
-                            navController = navController,
-                            onThemeChange = { isDark ->
-                                darkTheme = isDark
-                            },
-                            darkTheme
+                            navController = navController
                         )
                     }
                 }
