@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import com.example.scheduleme.ui.calendar.CalendarScreen
 import com.example.scheduleme.ui.settings.SettingsScreen
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(navController: NavHostController){
