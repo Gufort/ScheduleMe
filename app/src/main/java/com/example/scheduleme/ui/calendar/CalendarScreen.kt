@@ -55,6 +55,6 @@ fun CalendarScreen(openSettings: () -> Unit){
             }
         )
         WeekHeader()
-        CalendarGrid(currentDate)
+        CalendarGrid(currentDate, onDayClick = { date -> println(date) })
     }
 }
