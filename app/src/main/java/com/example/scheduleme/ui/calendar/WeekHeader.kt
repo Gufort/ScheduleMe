@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +20,7 @@ fun WeekHeader(){
     val weekDays = listOf("пн", "вт", "ср", "чт", "пт", "сб", "вс")
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
-        modifier = Modifier.height(50.dp).background(Color(0xFFFF9800))
+        modifier = Modifier.height(50.dp).background(MaterialTheme.colorScheme.primary)
     ) {
         items(weekDays.size) { index ->
             Box(

@@ -2,12 +2,14 @@ package com.example.scheduleme.ui.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,7 +31,8 @@ fun CalendarGrid(date: YearMonth){
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)
-                    .border(1.dp, Color.Gray),
+                    .border(1.dp, Color.Gray)
+                    .background(MaterialTheme.colorScheme.secondary),
                 contentAlignment = Alignment.Center
             ) {
                 Text(text = "${listOfDays[index].date.dayOfMonth.toString()}", color = if(listOfDays[index].isWeekEnd) Color.Red else Color.Black)
