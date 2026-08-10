@@ -13,10 +13,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,9 +23,8 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit){
+fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate: LocalDate?){
     val listOfDays = buildCalendarDays(date.year, date.monthValue)
-    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
         modifier = Modifier.fillMaxWidth()
@@ -42,7 +37,6 @@ fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit){
                     .border(1.dp, Color.Gray)
                     .background(if (selectedDate == day.date) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
                     .clickable {
-                        selectedDate = day.date
                         onDayClick(day.date) },
                 contentAlignment = Alignment.Center
             ) {

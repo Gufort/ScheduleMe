@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import java.time.LocalDate
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -28,6 +29,10 @@ fun CalendarScreen(openSettings: () -> Unit){
     var currentDate by remember{
         mutableStateOf(YearMonth.now())
     }
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(start = 15.dp, top = 50.dp, end = 15.dp, bottom = 15.dp)
@@ -55,6 +60,18 @@ fun CalendarScreen(openSettings: () -> Unit){
             }
         )
         WeekHeader()
-        CalendarGrid(currentDate, onDayClick = { date -> println(date) })
+        CalendarGrid(currentDate, onDayClick = { date ->
+            showDialog = true
+            selectedDate = date
+        }, selectedDate)
+        if (showDialog && currentDate != null) {
+            ShiftDialog(
+                date = selectedDate!!,
+                onDismiss = {
+                    showDialog = false
+                    selectedDate = null
+                }
+            )
+        }
     }
 }
