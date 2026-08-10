@@ -14,9 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.example.scheduleme.navigation.NavGraph
 import com.example.scheduleme.ui.animations.StartAnimation
+import com.example.scheduleme.ui.settings.SettingsViewModel
 import com.example.scheduleme.ui.theme.ScheduleMeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,9 +30,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var darkTheme by remember {
-                mutableStateOf(false)
-            }
+            val viewModel: SettingsViewModel = hiltViewModel()
+            val darkTheme by viewModel.darkTheme.collectAsStateWithLifecycle()
             ScheduleMeTheme (darkTheme = darkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
