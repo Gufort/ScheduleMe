@@ -1,4 +1,4 @@
-package com.example.scheduleme.ui.calendar
+package com.example.scheduleme.model
 
 import java.time.LocalDate
 

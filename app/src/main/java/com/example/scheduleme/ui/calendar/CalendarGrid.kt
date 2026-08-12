@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.scheduleme.model.CalendarDay
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth

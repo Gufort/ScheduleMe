@@ -12,6 +12,8 @@ composeBom = "2026.02.01"
 navigationRuntimeKtx = "2.9.8"
 benchmarkTraceprocessor = "1.4.1"
 hilt = "2.59.2"
+room = "2.8.4"
+roomCommonJvm = "2.8.4"
 
 
 [libraries]
@@ -33,6 +35,10 @@ androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navig
 androidx-benchmark-traceprocessor = { group = "androidx.benchmark", name = "benchmark-traceprocessor", version.ref = "benchmarkTraceprocessor" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 
 
 [plugins]
