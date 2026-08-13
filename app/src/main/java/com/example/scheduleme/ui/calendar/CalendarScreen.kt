@@ -12,14 +12,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -33,45 +37,57 @@ fun CalendarScreen(openSettings: () -> Unit){
         mutableStateOf(false)
     }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
-
-    Column(
-        modifier = Modifier.fillMaxSize().padding(start = 15.dp, top = 50.dp, end = 15.dp, bottom = 15.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            IconButton( onClick = openSettings ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Настройки"
-                )
-            }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
-
-        CalendarHeader(
-            date = currentDate,
-            onPreviousClick = {
-                currentDate = currentDate.minusMonths(1)
-            },
-            onNextClick = {
-                currentDate = currentDate.plusMonths(1)
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier.fillMaxSize().padding(paddingValues)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                IconButton( onClick = openSettings ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Настройки"
+                    )
+                }
             }
-        )
-        WeekHeader()
-        CalendarGrid(currentDate, onDayClick = { date ->
-            showDialog = true
-            selectedDate = date
-        }, selectedDate)
-        if (showDialog && currentDate != null) {
-            ShiftDialog(
-                date = selectedDate!!,
-                onDismiss = {
-                    showDialog = false
-                    selectedDate = null
+
+            CalendarHeader(
+                date = currentDate,
+                onPreviousClick = {
+                    currentDate = currentDate.minusMonths(1)
+                },
+                onNextClick = {
+                    currentDate = currentDate.plusMonths(1)
                 }
             )
+            WeekHeader()
+            CalendarGrid(currentDate, onDayClick = { date ->
+                showDialog = true
+                selectedDate = date
+            }, selectedDate)
+            if (showDialog && currentDate != null) {
+                ShiftDialog(
+                    date = selectedDate!!,
+                    onDismiss = {
+                        showDialog = false
+                        selectedDate = null
+                    },
+                    onTemplateCreated = { name ->
+                        coroutineScope.launch{
+                            snackbarHostState.showSnackbar("Шаблон смены $name успешно создан!")
+                        }
+                    }
+                )
+            }
         }
     }
 }

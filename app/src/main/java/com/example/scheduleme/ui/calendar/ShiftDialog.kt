@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +39,8 @@ import java.time.LocalTime
 fun ShiftDialog(
     date: LocalDate,
     viewModel: ShiftTemplateViewModel = hiltViewModel(),
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onTemplateCreated: (String) -> Unit
 ){
     var name by remember { mutableStateOf("") }
     var startTime by remember { mutableStateOf(LocalTime.of(9, 0)) }
@@ -45,6 +48,8 @@ fun ShiftDialog(
     var showEndTimePicker by remember { mutableStateOf(false) }
     var showStartTimePicker by remember { mutableStateOf(false) }
     var description by remember { mutableStateOf("") }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     Dialog(
         onDismissRequest = onDismiss
     ) {
@@ -150,6 +155,8 @@ fun ShiftDialog(
                                 endTime,
                                 description
                             )
+                            onTemplateCreated(name)
+                            onDismiss()
                         }
                     ) {
                         Text(text = "Создать")
