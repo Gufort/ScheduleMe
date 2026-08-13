@@ -1,5 +1,8 @@
 package com.example.scheduleme.model
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scheduleme.data.ShiftTemplateRepository
@@ -12,6 +15,8 @@ import javax.inject.Inject
 class ShiftTemplateViewModel @Inject constructor(
     private val repository: ShiftTemplateRepository
 ) : ViewModel() {
+    var templates by mutableStateOf<List<ShiftTemplateEntity>>(emptyList())
+       private set
     fun createTemplate(
         name: String,
         startTime: LocalTime,
@@ -27,6 +32,12 @@ class ShiftTemplateViewModel @Inject constructor(
             )
 
             repository.createTemplate(template)
+        }
+    }
+
+    fun loadTemplates(){
+        viewModelScope.launch {
+            templates = repository.getAllTemplates()
         }
     }
 }
