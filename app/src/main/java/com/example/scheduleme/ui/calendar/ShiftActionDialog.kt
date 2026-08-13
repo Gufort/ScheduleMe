@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -43,18 +43,20 @@ fun ShiftActionDialog(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Button(
-                    onClick = onCreateTemplate
+                OutlinedButton(
+                    onClick = onCreateTemplate,
+                    modifier = Modifier.fillMaxWidth().height(50.dp)
                 ){
                     Text(text = "Создать шаблон смены")
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                Button(
-                    onClick = onChooseTemplate
+                OutlinedButton(
+                    onClick = onChooseTemplate,
+                    modifier = Modifier.fillMaxWidth().height(50.dp)
                 ) {
-                    Text(text = "Выбрать существующий шаблон")
+                    Text(text = "Выбрать существующий")
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))

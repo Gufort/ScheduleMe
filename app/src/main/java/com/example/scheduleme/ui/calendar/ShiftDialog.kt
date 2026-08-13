@@ -43,8 +43,8 @@ fun ShiftDialog(
     onTemplateCreated: (String) -> Unit
 ){
     var name by remember { mutableStateOf("") }
-    var startTime by remember { mutableStateOf(LocalTime.of(9, 0)) }
-    var endTime by remember { mutableStateOf(LocalTime.of(9, 0)) }
+    var startTime by remember { mutableStateOf(LocalTime.of(8, 0)) }
+    var endTime by remember { mutableStateOf(LocalTime.of(21, 0)) }
     var showEndTimePicker by remember { mutableStateOf(false) }
     var showStartTimePicker by remember { mutableStateOf(false) }
     var description by remember { mutableStateOf("") }
