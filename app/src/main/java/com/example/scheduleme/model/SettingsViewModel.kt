@@ -1,4 +1,4 @@
-package com.example.scheduleme.ui.settings
+package com.example.scheduleme.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

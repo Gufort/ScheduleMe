@@ -19,7 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.example.scheduleme.navigation.NavGraph
 import com.example.scheduleme.ui.animations.StartAnimation
-import com.example.scheduleme.ui.settings.SettingsViewModel
+import com.example.scheduleme.model.SettingsViewModel
 import com.example.scheduleme.ui.theme.ScheduleMeTheme
 import dagger.hilt.android.AndroidEntryPoint
 

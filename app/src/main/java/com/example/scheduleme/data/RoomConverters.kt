@@ -3,11 +3,10 @@ package com.example.scheduleme.data
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 import java.time.LocalTime
 
 class RoomConverters {
-    @TypeConverters
+    @TypeConverter
     fun fromLocalTime(value: LocalTime): String{
         return value.toString()
     }

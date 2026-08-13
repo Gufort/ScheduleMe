@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.scheduleme.model.SettingsViewModel
 
 @SuppressLint("RememberReturnType")
 @Composable
