@@ -8,8 +8,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,13 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.scheduleme.model.CalendarDay
+import com.example.scheduleme.model.ShiftAssignment
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate: LocalDate?){
+fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate: LocalDate?, assignments: List<ShiftAssignment>){
     val listOfDays = buildCalendarDays(date.year, date.monthValue)
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
@@ -32,6 +38,9 @@ fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate:
     ) {
         items(listOfDays.size){ index ->
             val day = listOfDays[index]
+            val hasShift = assignments.any{
+                it.date == day.date
+            }
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)
@@ -41,7 +50,20 @@ fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate:
                         onDayClick(day.date) },
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "${day.date.dayOfMonth.toString()}", color = if(day.isWeekEnd) Color.Red else Color.Black)
+                Text(text = "${day.date.dayOfMonth}",
+                    color = if(day.isWeekEnd) Color.Red else Color.Black,
+                    modifier = Modifier.align(Alignment.Center))
+
+                if(hasShift){
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Смена назначена",
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(4.dp)
+                            .size(18.dp)
+                    )
+                }
             }
         }
     }
