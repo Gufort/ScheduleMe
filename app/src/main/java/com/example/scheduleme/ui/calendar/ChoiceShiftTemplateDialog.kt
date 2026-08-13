@@ -78,10 +78,13 @@ fun ChoiceShiftTemplateDialog(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.heightIn(max = 400.dp)
                     ) {
-                        items(templates){ template ->
+                        items(templates) { template ->
                             ShiftTemplateCard(
-                                template,
-                                onClick = onDismiss
+                                template = template,
+                                onClick = {
+                                    onTemplateSelected(template)
+                                    onDismiss()
+                                }
                             )
                         }
                     }

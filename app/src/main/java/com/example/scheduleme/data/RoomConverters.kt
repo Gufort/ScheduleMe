@@ -8,24 +8,24 @@ import java.time.LocalTime
 
 class RoomConverters {
     @TypeConverter
-    fun fromLocalTime(value: LocalTime): String{
-        return value.toString()
+    fun fromLocalTime(value: LocalTime?): String? {
+        return value?.toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun toLocalTime(value: String): LocalTime {
+    fun toLocalTime(value: String?): LocalTime? {
         return LocalTime.parse(value)
     }
 
     @TypeConverter
-    fun fromLocalDate(value: LocalDate): String{
-        return value.toString()
+    fun fromLocalDate(value: LocalDate?): String?{
+        return value?.toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun toLocalDate(value: String): LocalDate {
-        return LocalDate.parse(value)
+    fun toLocalDate(value: String?): LocalDate? {
+        return value?.let { LocalDate.parse(it) }
     }
 }

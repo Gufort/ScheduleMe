@@ -17,7 +17,7 @@ class ShiftAssignmentViewModel @Inject constructor(
         template : ShiftTemplateEntity
     ){
         viewModelScope.launch {
-            repository.createShift(ShiftAssignment(date = date, template = template))
+            repository.createShift(ShiftAssignment(date = date, templateId = template.id))
         }
     }
 }

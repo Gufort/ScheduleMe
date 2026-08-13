@@ -9,5 +9,5 @@ data class ShiftAssignment(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val date: LocalDate,
-    val template: ShiftTemplateEntity
+    val templateId: Long
 )
