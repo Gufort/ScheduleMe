@@ -33,7 +33,15 @@ fun CalendarScreen(openSettings: () -> Unit){
     var currentDate by remember{
         mutableStateOf(YearMonth.now())
     }
-    var showDialog by remember {
+    var showShiftActionDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var showCreateTemplateDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var showChoiceTemplateDialog by remember {
         mutableStateOf(false)
     }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -71,22 +79,58 @@ fun CalendarScreen(openSettings: () -> Unit){
             )
             WeekHeader()
             CalendarGrid(currentDate, onDayClick = { date ->
-                showDialog = true
+                showShiftActionDialog = true
                 selectedDate = date
             }, selectedDate)
-            if (showDialog && currentDate != null) {
-                ShiftDialog(
-                    date = selectedDate!!,
-                    onDismiss = {
-                        showDialog = false
-                        selectedDate = null
+
+            if (showShiftActionDialog) {
+                ShiftActionDialog(
+                    onCreateTemplate = {
+                        showShiftActionDialog = false
+                        showCreateTemplateDialog = true
                     },
-                    onTemplateCreated = { name ->
-                        coroutineScope.launch{
-                            snackbarHostState.showSnackbar("Шаблон смены $name успешно создан!")
-                        }
+                    onChooseTemplate = {
+                        showShiftActionDialog = false
+                        showChoiceTemplateDialog = true
+                    },
+                    onDismiss = {
+                        showShiftActionDialog = false
+                        selectedDate = null
                     }
                 )
+            }
+
+            if (showCreateTemplateDialog) {
+                selectedDate?.let { date ->
+                    ShiftDialog(
+                        date = date,
+                        onDismiss = {
+                            showCreateTemplateDialog = false
+                            selectedDate = null
+                        },
+                        onTemplateCreated = { name ->
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(
+                                    "Шаблон смены $name успешно создан!"
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+
+            if (showChoiceTemplateDialog) {
+                selectedDate?.let { date ->
+                    ChoiceShiftTemplateDialog(
+                        onDismiss = {
+                            showChoiceTemplateDialog = false
+                            selectedDate = null
+                        },
+                        onTemplateSelected = { template ->
+                            //
+                        }
+                    )
+                }
             }
         }
     }
