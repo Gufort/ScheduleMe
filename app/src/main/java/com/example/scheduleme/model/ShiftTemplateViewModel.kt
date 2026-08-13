@@ -40,4 +40,13 @@ class ShiftTemplateViewModel @Inject constructor(
             templates = repository.getAllTemplates()
         }
     }
+
+    fun deleteAllTemplates(){
+        viewModelScope.launch {
+            for(t in templates){
+                repository.deleteTemplate(t)
+            }
+            templates = emptyList()
+        }
+    }
 }

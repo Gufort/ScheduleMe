@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -57,8 +59,18 @@ fun ChoiceShiftTemplateDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if(templates.isEmpty())
+                if(templates.isEmpty()){
                     Text(text = "У вас пока нет шаблонов смен")
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    TextButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Выйти")
+                    }
+                }
                 else{
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
@@ -69,10 +81,27 @@ fun ChoiceShiftTemplateDialog(
                         items(templates){ template ->
                             ShiftTemplateCard(
                                 template,
-                                onClick = {
-                                    onTemplateSelected(template)
-                                }
+                                onClick = onDismiss
                             )
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    )
+                    {
+                        TextButton(
+                            onClick = {
+                                viewModel.deleteAllTemplates()
+                            }
+                        ) {
+                            Text("Удалить все шаблоны")
+                        }
+
+                        TextButton(
+                            onClick = onDismiss
+                        ) {
+                            Text("Отмена")
                         }
                     }
                 }
