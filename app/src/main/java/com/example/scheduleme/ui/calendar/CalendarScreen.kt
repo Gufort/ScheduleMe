@@ -23,6 +23,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.scheduleme.model.ShiftAssignmentViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
@@ -44,6 +46,7 @@ fun CalendarScreen(openSettings: () -> Unit){
     var showChoiceTemplateDialog by remember {
         mutableStateOf(false)
     }
+    val viewModel : ShiftAssignmentViewModel = hiltViewModel()
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -127,7 +130,12 @@ fun CalendarScreen(openSettings: () -> Unit){
                             selectedDate = null
                         },
                         onTemplateSelected = { template ->
-                            //
+                            viewModel.createShiftDay(date, template)
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar(
+                                    "Рабочая смена ${template.name} на дату $date добавлена!"
+                                )
+                            }
                         }
                     )
                 }

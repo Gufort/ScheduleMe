@@ -38,4 +38,20 @@ object DatabaseModule{
     ): ShiftTemplateRepository{
         return ShiftTemplateRepository(dao)
     }
+
+    @Provides
+    fun provideShiftAssignmentDao(
+        database: AppDatabase
+    ): ShiftAssignmentDao{
+        return database.shiftAssignmentDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideShiftAssignmentRepository(
+        dao: ShiftAssignmentDao
+    ): ShiftAssignmentRepository{
+        return ShiftAssignmentRepository(dao)
+    }
+
 }
