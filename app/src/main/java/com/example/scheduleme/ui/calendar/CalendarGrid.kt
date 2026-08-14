@@ -58,6 +58,7 @@ fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate:
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = "Смена назначена",
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(4.dp)

@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.scheduleme.data.ShiftTemplateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,20 +17,12 @@ class ShiftTemplateViewModel @Inject constructor(
     var templates by mutableStateOf<List<ShiftTemplateEntity>>(emptyList())
        private set
     fun createTemplate(
-        name: String,
-        startTime: LocalTime,
-        endTime: LocalTime,
-        description: String
-    ){
+        template: ShiftTemplateEntity,
+        onCreated: (ShiftTemplateEntity) -> Unit
+    ) {
         viewModelScope.launch {
-            val template = ShiftTemplateEntity(
-                name = name,
-                startTime = startTime,
-                endTime = endTime,
-                description = description
-            )
-
-            repository.createTemplate(template)
+            val id = repository.createTemplate(template)
+            onCreated(template.copy(id = id))
         }
     }
 

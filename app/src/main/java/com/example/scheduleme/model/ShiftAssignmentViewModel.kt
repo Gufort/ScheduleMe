@@ -19,12 +19,18 @@ class ShiftAssignmentViewModel @Inject constructor(
         private set
     fun createShiftDay(
         date: LocalDate,
-        template : ShiftTemplateEntity
-    ){
+        template: ShiftTemplateEntity
+    ) {
         viewModelScope.launch {
-            repository.createShift(ShiftAssignment(date = date, templateId = template.id))
+            val shift = ShiftAssignment(
+                date = date,
+                templateId = template.id
+            )
+
+            repository.createShift(shift)
+
+            assignments = assignments + shift
         }
-        loadAssignments()
     }
 
     fun loadAssignments(){

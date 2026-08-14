@@ -118,10 +118,11 @@ fun CalendarScreen(openSettings: () -> Unit){
                             showCreateTemplateDialog = false
                             selectedDate = null
                         },
-                        onTemplateCreated = { name ->
+                        onTemplateCreated = { template ->
+                            viewModel.createShiftDay(date, template)
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar(
-                                    "Шаблон смены $name успешно создан!"
+                                    "Шаблон смены ${template.name} успешно создан!"
                                 )
                             }
                         }

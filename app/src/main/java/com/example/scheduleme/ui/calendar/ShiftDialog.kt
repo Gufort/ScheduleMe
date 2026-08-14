@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.scheduleme.model.ShiftTemplateEntity
 import com.example.scheduleme.model.ShiftTemplateViewModel
 import java.time.LocalDate
 import java.time.LocalTime
@@ -40,7 +41,7 @@ fun ShiftDialog(
     date: LocalDate,
     viewModel: ShiftTemplateViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
-    onTemplateCreated: (String) -> Unit
+    onTemplateCreated: (ShiftTemplateEntity) -> Unit
 ){
     var name by remember { mutableStateOf("") }
     var startTime by remember { mutableStateOf(LocalTime.of(8, 0)) }
@@ -149,14 +150,17 @@ fun ShiftDialog(
                 ){
                     TextButton(
                         onClick = {
-                            viewModel.createTemplate(
-                                name,
-                                startTime,
-                                endTime,
-                                description
+                            val template = ShiftTemplateEntity(
+                                name = name,
+                                startTime = startTime,
+                                endTime = endTime,
+                                description = description
                             )
-                            onTemplateCreated(name)
-                            onDismiss()
+
+                            viewModel.createTemplate(template) { createdTemplate ->
+                                onTemplateCreated(createdTemplate)
+                                onDismiss()
+                            }
                         }
                     ) {
                         Text(text = "Создать")
