@@ -15,6 +15,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,6 +49,7 @@ fun CalendarScreen(openSettings: () -> Unit){
     var showChoiceTemplateDialog by remember {
         mutableStateOf(false)
     }
+
     val viewModel : ShiftAssignmentViewModel = hiltViewModel()
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -56,6 +59,16 @@ fun CalendarScreen(openSettings: () -> Unit){
         viewModel.loadAssignments()
     }
     val assignments = viewModel.assignments
+
+    var isSectorSelectionMode by remember{
+        mutableStateOf(false)
+    }
+    var sectorStart by remember {
+        mutableStateOf<LocalDate?>(null)
+    }
+    var sectorEnd by remember {
+        mutableStateOf<LocalDate?>(null)
+    }
 
     Scaffold(
         snackbarHost = {
@@ -88,10 +101,47 @@ fun CalendarScreen(openSettings: () -> Unit){
                 }
             )
             WeekHeader()
-            CalendarGrid(currentDate, onDayClick = { date ->
-                showShiftActionDialog = true
-                selectedDate = date
-            }, selectedDate, assignments)
+            CalendarGrid(
+                currentDate,
+                onDayClick = { date ->
+                    if(isSectorSelectionMode){
+                        if (sectorStart == null) {
+                            sectorStart = date
+                        } else if (sectorEnd == null) {
+                            sectorEnd = date
+                        } else {
+                            sectorStart = date
+                            sectorEnd = null
+                        }
+                    }
+                    else{
+                        showShiftActionDialog = true
+                        selectedDate = date
+                    }
+                },
+                selectedDate,
+                sectorStart,
+                sectorEnd,
+                isSectorSelectionMode,
+                assignments
+            )
+
+            TextButton(
+                onClick = {
+                    isSectorSelectionMode = !isSectorSelectionMode
+                    if(!isSectorSelectionMode){
+                        sectorStart = null
+                        sectorEnd = null
+                    }
+                }
+            ) {
+                Text(
+                    if (isSectorSelectionMode)
+                        "Отмена"
+                    else
+                        "Выбрать сектор"
+                )
+            }
 
             if (showShiftActionDialog) {
                 ShiftActionDialog(

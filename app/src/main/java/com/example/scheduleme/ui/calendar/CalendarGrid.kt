@@ -30,7 +30,15 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate: LocalDate?, assignments: List<ShiftAssignment>){
+fun CalendarGrid(
+    date: YearMonth,
+    onDayClick: (LocalDate) -> Unit,
+    selectedDate: LocalDate?,
+    sectorStart: LocalDate?,
+    sectorEnd: LocalDate?,
+    isSectorSelectionMode: Boolean,
+    assignments: List<ShiftAssignment>)
+{
     val listOfDays = buildCalendarDays(date.year, date.monthValue)
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
@@ -38,6 +46,16 @@ fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate:
     ) {
         items(listOfDays.size){ index ->
             val day = listOfDays[index]
+            val isSectorStart =
+                isSectorSelectionMode &&
+                        sectorStart != null &&
+                        day.date == sectorStart
+
+            val isInSector =
+                isSectorSelectionMode &&
+                        sectorStart != null &&
+                        sectorEnd != null &&
+                        day.date in sectorStart..sectorEnd
             val hasShift = assignments.any{
                 it.date == day.date
             }
@@ -45,7 +63,16 @@ fun CalendarGrid(date: YearMonth, onDayClick: (LocalDate) -> Unit, selectedDate:
                 modifier = Modifier
                     .aspectRatio(1f)
                     .border(1.dp, Color.Gray)
-                    .background(if (selectedDate == day.date) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                    .background(
+                        if (
+                            isSectorStart ||
+                            isInSector ||
+                            selectedDate == day.date
+                        ) {
+                            MaterialTheme.colorScheme.primary
+                        }
+                        else MaterialTheme.colorScheme.secondary
+                    )
                     .clickable {
                         onDayClick(day.date) },
                 contentAlignment = Alignment.Center
