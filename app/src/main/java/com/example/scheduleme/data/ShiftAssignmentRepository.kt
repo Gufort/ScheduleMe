@@ -27,6 +27,10 @@ class ShiftAssignmentRepository(
         dao.delete(shift)
     }
 
+    suspend fun deleteAllShifts() {
+        dao.deleteAll()
+    }
+
     suspend fun getAllShifts() : List<ShiftAssignment>{
         return dao.getAll()
     }

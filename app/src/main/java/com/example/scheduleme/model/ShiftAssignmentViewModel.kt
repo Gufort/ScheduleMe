@@ -50,6 +50,13 @@ class ShiftAssignmentViewModel @Inject constructor(
         }
     }
 
+    fun deleteAllShifts(){
+        viewModelScope.launch {
+            repository.deleteAllShifts()
+            assignments = emptyList()
+        }
+    }
+
     fun loadAssignments(){
         viewModelScope.launch {
             assignments = repository.getAllShifts()

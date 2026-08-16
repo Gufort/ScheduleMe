@@ -25,6 +25,9 @@ interface ShiftAssignmentDao {
         shift : ShiftAssignment
     )
 
+    @Query("DELETE FROM shift_assignments")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM shift_assignments")
     suspend fun getAll(): List<ShiftAssignment>
 

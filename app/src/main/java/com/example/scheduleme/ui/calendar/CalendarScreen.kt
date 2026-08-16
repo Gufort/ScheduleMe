@@ -72,6 +72,9 @@ fun CalendarScreen(openSettings: () -> Unit){
     var showChoiceSectorDialog by remember {
         mutableStateOf(false)
     }
+    var showDeleteShiftsButton by remember{
+        mutableStateOf(true)
+    }
 
     Scaffold(
         snackbarHost = {
@@ -150,13 +153,21 @@ fun CalendarScreen(openSettings: () -> Unit){
                     )
                 }
 
-                if(sectorStart != null && sectorEnd != null){
+                if (sectorStart != null && sectorEnd != null) {
                     TextButton(
                         onClick = {
                             showChoiceSectorDialog = true
                         }
                     ) {
                         Text("Дублировать сектор")
+                    }
+                } else {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteAllShifts()
+                        }
+                    ) {
+                        Text("Удалить все смены")
                     }
                 }
             }
