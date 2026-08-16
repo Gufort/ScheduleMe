@@ -69,6 +69,9 @@ fun CalendarScreen(openSettings: () -> Unit){
     var sectorEnd by remember {
         mutableStateOf<LocalDate?>(null)
     }
+    var showChoiceSectorDialog by remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         snackbarHost = {
@@ -126,21 +129,36 @@ fun CalendarScreen(openSettings: () -> Unit){
                 assignments
             )
 
-            TextButton(
-                onClick = {
-                    isSectorSelectionMode = !isSectorSelectionMode
-                    if(!isSectorSelectionMode){
-                        sectorStart = null
-                        sectorEnd = null
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                TextButton(
+                    onClick = {
+                        isSectorSelectionMode = !isSectorSelectionMode
+                        if(!isSectorSelectionMode){
+                            sectorStart = null
+                            sectorEnd = null
+                        }
+                    }
+                ) {
+                    Text(
+                        if (isSectorSelectionMode)
+                            "Отмена"
+                        else
+                            "Выбрать сектор"
+                    )
+                }
+
+                if(sectorStart != null && sectorEnd != null){
+                    TextButton(
+                        onClick = {
+                            showChoiceSectorDialog = true
+                        }
+                    ) {
+                        Text("Дублировать сектор")
                     }
                 }
-            ) {
-                Text(
-                    if (isSectorSelectionMode)
-                        "Отмена"
-                    else
-                        "Выбрать сектор"
-                )
             }
 
             if (showShiftActionDialog) {
@@ -197,6 +215,16 @@ fun CalendarScreen(openSettings: () -> Unit){
                         }
                     )
                 }
+            }
+
+            if (showChoiceSectorDialog) {
+                ChoiceSectorDialog(
+                    onDismiss = {
+                        showChoiceSectorDialog = false
+                    },
+                    onRepeat = {
+                    }
+                )
             }
         }
     }
