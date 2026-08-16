@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.scheduleme.model.ShiftAssignment
+import java.time.LocalDate
 
 @Dao
 interface ShiftAssignmentDao {
@@ -29,4 +30,10 @@ interface ShiftAssignmentDao {
 
     @Query("SELECT * FROM shift_assignments WHERE id = :id")
     suspend fun getById(id: Long) : ShiftAssignment?
+
+    @Query(" SELECT * FROM shift_assignments WHERE date BETWEEN :startDate AND :endDate")
+    suspend fun getBetweenDates(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<ShiftAssignment>
 }

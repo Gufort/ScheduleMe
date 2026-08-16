@@ -222,7 +222,18 @@ fun CalendarScreen(openSettings: () -> Unit){
                     onDismiss = {
                         showChoiceSectorDialog = false
                     },
-                    onRepeat = {
+                    onRepeat = { count ->
+                        if(sectorStart != null && sectorEnd != null){
+                            viewModel.duplicateSector(
+                                sectorStart!!,
+                                sectorEnd!!,
+                                count
+                            )
+                        }
+                        showChoiceSectorDialog = false
+                        isSectorSelectionMode = false
+                        sectorStart = null
+                        sectorEnd = null
                     }
                 )
             }

@@ -1,5 +1,7 @@
 package com.example.scheduleme.model
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,6 +32,21 @@ class ShiftAssignmentViewModel @Inject constructor(
             repository.createShift(shift)
 
             assignments = assignments + shift
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun duplicateSector(
+        startDate: LocalDate,
+        endDate: LocalDate,
+        repeatCount: Int
+    ){
+        viewModelScope.launch {
+            repository.duplicateSector(
+                startDate, endDate, repeatCount
+            )
+
+            assignments = repository.getAllShifts()
         }
     }
 
