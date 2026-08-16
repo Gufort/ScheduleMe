@@ -40,4 +40,14 @@ class ShiftTemplateViewModel @Inject constructor(
             templates = emptyList()
         }
     }
+
+    fun getTemplateById(
+        id: Long,
+        onResult: (ShiftTemplateEntity?) -> Unit
+    ){
+        viewModelScope.launch {
+            val template = repository.getTemplateById(id)
+            onResult(template)
+        }
+    }
 }

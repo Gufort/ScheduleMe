@@ -44,11 +44,13 @@ fun ShiftDialog(
     onTemplateCreated: (ShiftTemplateEntity) -> Unit
 ){
     var name by remember { mutableStateOf("") }
+    var nameError by remember { mutableStateOf(true) }
     var startTime by remember { mutableStateOf(LocalTime.of(8, 0)) }
     var endTime by remember { mutableStateOf(LocalTime.of(21, 0)) }
     var showEndTimePicker by remember { mutableStateOf(false) }
     var showStartTimePicker by remember { mutableStateOf(false) }
     var description by remember { mutableStateOf("") }
+    var timeError by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     Dialog(
@@ -79,11 +81,14 @@ fun ShiftDialog(
 
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = {
+                        name = it
+                        nameError = false },
                     label = { Text("Название") },
                     placeholder = { Text("Введите текст...") },
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    supportingText = { if (nameError) Text("Введите название смены") }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -93,7 +98,9 @@ fun ShiftDialog(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     OutlinedButton(
-                        onClick = { showStartTimePicker = true },
+                        onClick = {
+                            showStartTimePicker = true
+                        },
                         modifier = Modifier.weight(1f)
                     ) {
                         Column(
@@ -104,7 +111,7 @@ fun ShiftDialog(
                                 text = String.format(
                                     "%02d:%02d",
                                     startTime.hour,
-                                    startTime.second
+                                    startTime.minute
                                 )
                             )
                         }
@@ -150,6 +157,11 @@ fun ShiftDialog(
                 ){
                     TextButton(
                         onClick = {
+                            nameError = name.isBlank()
+                            timeError = !startTime.isBefore(endTime)
+                            val timeError = !startTime.isBefore(endTime)
+                            if (nameError || timeError) return@TextButton
+
                             val template = ShiftTemplateEntity(
                                 name = name,
                                 startTime = startTime,
@@ -193,6 +205,13 @@ fun ShiftDialog(
                         onDismiss = {
                             showEndTimePicker = false
                         }
+                    )
+                }
+                if (timeError) {
+                    Text(
+                        text = "Время окончания должно быть позже времени начала!",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

@@ -27,7 +27,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.scheduleme.model.ShiftAssignment
 import com.example.scheduleme.model.ShiftAssignmentViewModel
+import com.example.scheduleme.model.ShiftTemplateEntity
+import com.example.scheduleme.model.ShiftTemplateViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
@@ -51,6 +54,7 @@ fun CalendarScreen(openSettings: () -> Unit){
     }
 
     val viewModel : ShiftAssignmentViewModel = hiltViewModel()
+    val templateViewModel: ShiftTemplateViewModel = hiltViewModel()
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -74,6 +78,16 @@ fun CalendarScreen(openSettings: () -> Unit){
     }
     var showDeleteShiftsButton by remember{
         mutableStateOf(true)
+    }
+
+    var showDescriptionDialog by remember {
+        mutableStateOf(false)
+    }
+    var selectedShift by remember {
+        mutableStateOf<ShiftAssignment?>(null)
+    }
+    var selectedTemplate by remember {
+        mutableStateOf<ShiftTemplateEntity?>(null)
     }
 
     Scaffold(
@@ -123,6 +137,20 @@ fun CalendarScreen(openSettings: () -> Unit){
                     else{
                         showShiftActionDialog = true
                         selectedDate = date
+                    }
+                },
+                onDayShiftClick = { date ->
+                    val shift = assignments.find {
+                        it.date == date
+                    }
+                    if(shift != null){
+                        templateViewModel.getTemplateById(shift.templateId) { template ->
+                            if (template != null) {
+                                selectedShift = shift
+                                selectedTemplate = template
+                                showDescriptionDialog = true
+                            }
+                        }
                     }
                 },
                 selectedDate,
@@ -247,6 +275,19 @@ fun CalendarScreen(openSettings: () -> Unit){
                         sectorEnd = null
                     }
                 )
+            }
+            if(showDescriptionDialog){
+                if(selectedShift != null && selectedTemplate != null){
+                    DescriptionDialog(
+                        selectedShift!!,
+                        selectedTemplate!!,
+                        onDismiss = {
+                            showDescriptionDialog = false
+                            selectedShift = null
+                            selectedTemplate = null
+                        }
+                    )
+                }
             }
         }
     }

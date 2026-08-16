@@ -33,6 +33,7 @@ import java.time.YearMonth
 fun CalendarGrid(
     date: YearMonth,
     onDayClick: (LocalDate) -> Unit,
+    onDayShiftClick: (LocalDate) -> Unit,
     selectedDate: LocalDate?,
     sectorStart: LocalDate?,
     sectorEnd: LocalDate?,
@@ -50,7 +51,6 @@ fun CalendarGrid(
                 isSectorSelectionMode &&
                         sectorStart != null &&
                         day.date == sectorStart
-
             val isInSector =
                 isSectorSelectionMode &&
                         sectorStart != null &&
@@ -59,6 +59,7 @@ fun CalendarGrid(
             val hasShift = assignments.any{
                 it.date == day.date
             }
+
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)
@@ -73,8 +74,7 @@ fun CalendarGrid(
                         }
                         else MaterialTheme.colorScheme.secondary
                     )
-                    .clickable {
-                        onDayClick(day.date) },
+                    .clickable { if(hasShift) onDayShiftClick(day.date) else onDayClick(day.date) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(text = "${day.date.dayOfMonth}",
