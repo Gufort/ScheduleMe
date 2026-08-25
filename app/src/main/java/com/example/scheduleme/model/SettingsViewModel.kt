@@ -14,13 +14,15 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val repository: SettingsRepository
 ) : ViewModel() {
-    val darkTheme: StateFlow<Boolean> =
+
+    val darkTheme: StateFlow<Boolean?> =
         repository.darkTheme.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = false
+            initialValue = null
         )
-    fun setDarkTheme(value: Boolean){
+
+    fun setDarkTheme(value: Boolean) {
         viewModelScope.launch {
             repository.setDarkTheme(value)
         }

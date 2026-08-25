@@ -74,7 +74,11 @@ fun CalendarGrid(
                         }
                         else MaterialTheme.colorScheme.secondary
                     )
-                    .clickable { if(hasShift) onDayShiftClick(day.date) else onDayClick(day.date) },
+                    .clickable {
+                        if(isSectorSelectionMode) onDayClick(day.date)
+                        else if(hasShift) onDayShiftClick(day.date)
+                        else onDayClick(day.date)
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 Text(text = "${day.date.dayOfMonth}",

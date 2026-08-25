@@ -39,7 +39,7 @@ fun SettingsScreen(
         mutableStateOf(false)
     }
     val darkTheme by viewModel.darkTheme.collectAsState()
-    val selectedTheme = if (darkTheme) "Темная" else "Светлая"
+    val selectedTheme = if (darkTheme == true) "Темная" else "Светлая"
     Column(
         modifier = Modifier.fillMaxSize().padding(start = 15.dp, top = 50.dp, end = 15.dp, bottom = 15.dp)
     ){
